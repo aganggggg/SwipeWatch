@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">上滑助手</string>
+    <string name="accessibility_label">上滑助手 · 读字与上滑</string>
+    <string name="accessibility_desc">开启后，上滑助手会读取当前界面的文字，在发现「上滑继续观看」这类提示时，代替你从屏幕底部向上滑一次。遇到小程序广告这类读不到文字的界面，会截取屏幕底部一条做本地识别。所有内容只在本机处理，不联网、不上传。</string>
+</resources>
