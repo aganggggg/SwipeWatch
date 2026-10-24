@@ -258,17 +258,16 @@ class SwipeAccessibilityService : AccessibilityService() {
                         continue
                     }
 
-                    val wait = Detector.cooldownLeft(prefs)
-                    if (wait > 0L) {
-                        delay(wait.coerceAtMost(1000L))
-                        continue
-                    }
-
+                    // 冷却/退避期间绝对不能停扫。
+                    // 「上一次滑动到底有没有生效」只能靠一轮轮的观察来验证：停掉扫描，
+                    // 提示早就消失了也看不见，闩锁会一直挂着，表现就是「过了 5 秒也不滑」。
+                    // 该不该滑由 Detector 内部判断，这里只负责持续供数据。
                     val startedAt = SystemClock.elapsedRealtime()
                     val scan = scanWindow()
                     val nodeCost = SystemClock.elapsedRealtime() - startedAt
 
-                    // 先交给 Detector 判定。命中会自己闩住，直到提示消失才重新允许触发
+                    // 先交给 Detector 判定。命中后由它自己决定「滑 / 退避 / 放弃」，
+                    // 因为「滑了到底有没有生效」只能靠后续每一轮观察来验证
                     val before = AppState.triggerCount.value
                     Detector.accept(scan, prefs, AppState.Source.NODE, nodeCost)
                     val triggeredByNode = AppState.triggerCount.value != before
